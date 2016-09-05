@@ -1,28 +1,21 @@
-=== Paid Memberships Pro: Auto-Renewal Checkbox ===
-Contributors: strangerstudios
-Tags: pmpro, paid memberships pro, members, memberships, auto-renewal, renewal, checkbox
+=== Eighty / 20 Results: Annual Pricing Choice for Paid Memberships Pro ===
+Contributors: sjolshagen
+Tags: pmpro, paid memberships pro, members, memberships, annual pricing choice, annual pricing, choice
 Requires at least: 3.5
-Tested up to: 4.5
-Stable tag: .2
+Tested up to: 4.6
+Stable tag: .3.1
 
-Make auto renewal optional at checkout with a checkbox.
+Adds an option to select monthly or annual pricing for a membership. Will only show one or the other, based on the users choice.
 
 == Description ==
 
-Adds an option to PMPro membership levels: Auto Renewal Optional. If set and a recurring billing amount is present, a checkbox is added to the checkout page to optional enable auto renewal.
-
-This does not work with PMPro discount codes yet. If a customer uses a discount code, the auto renewal checkbox will be ignored and the default recurring billing settings from the discount code will be used.
+Adds an option to the PMPro membership level selection page: "Payment choice" ("Monthly" / "Annual"). Will show/hide the level type selected depending on radio button choice.
 
 == Installation ==
 
-1. Upload the `pmpro-auto-renewal-checkbox` folder to the `/wp-content/plugins/` directory.
+1. Upload the `pmpro-annual-renewal-choice` folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Edit your membership levels and set the "Auto Renewal" options for each level.
 
 == Changelog == 
-= .2 =
-* ENHANCEMENT: Added code so when users cancel a membership with a recurring subscription, they retain their membership until their next payment date.
-* ENHANCEMENT: Added code to handle cases where users are checking out and changing from recurring to non-recurring or vice versa. When changing from non-recurring to recurring, the subscription will be delayed until the user's old expiration date. When changing from recurring to non-recurring, the user's remaining days until their next payment will be added to their expiration date. (Calculations may be off for gateways other than Stripe and PayPal Express).
 
-= .1 =
-* First version.
