@@ -231,6 +231,7 @@ class e20rAnnualPricing {
 			wp_localize_script( 'e20r-annual-pricing', 'e20r_annual_pricing', array(
 					'levels'  => $this->annual_levels,
 					'level_map' => $this->get_level_map(),
+					'free_levels' => $this->get_free_levels(),
 					'default' => $this->get_setting( 'choice' ),
 				)
 			);
@@ -281,16 +282,16 @@ class e20rAnnualPricing {
 		ob_start();
 		?>
 		<div class="e20r-annual-pricing-choice">
-			<p class="e20r-annual-pricing-choice-header"><?php echo apply_filters( 'e20r-renewal-choice-header', __( "Payment choice", "e20rapc" ) ); ?>:
-			<input type="radio" id="e20r-monthly-pricing-choice" name="e20r-renewal_choice"
+			<h3 class="e20r-annual-pricing-choice-header"><?php echo apply_filters( 'e20r-renewal-choice-header', __( "Payment choice", "e20rapc" ) ); ?>: <span class="e20r-annual-pricing-choices">
+			<input type="radio" id="e20r-monthly-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="monthly" <?php checked( $renewal_choice, 'monthly' ); ?>/>
-			<label class="e20r-monthly-pricing-header"
+			<label class="e20r-annual-pricing-header"
 			       for="e20r-annual-pricing-choice"><?php _e( 'Monthly', 'e20rapc' ); ?></label>
-			<input type="radio" id="e20r-annual-pricing-choice" name="e20r-renewal_choice"
+			<input type="radio" id="e20r-annual-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="annually" <?php checked( $renewal_choice, 'annually' ); ?>/>
-			<label class="monthly-renewal-header"
-			       for="e20r-annual-princing-choice"><?php _e( 'Annual', 'e20rapc' ); ?></label>
-			</p>
+			<label class="e20r-annual-pricing-header"
+			       for="e20r-annual-pricing-choice"><?php _e( 'Annual', 'e20rapc' ); ?></label>
+			</span></h3>
 		</div>
 		<?php
 		$html = ob_get_clean();
@@ -449,6 +450,25 @@ class e20rAnnualPricing {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Fetch all free membership levels
+	 *
+	 * @return array    Array of level ID's that are free.
+	 */
+	public function get_free_levels() {
+
+		$levels = pmpro_getAllLevels(true);
+		$free_levels = array();
+
+		foreach( $levels as $level ) {
+			if (true === pmpro_isLevelFree( $level ) ) {
+				$free_levels[] = $level->id;
+			}
+		}
+
+		return $free_levels;
 	}
 
 	/**
