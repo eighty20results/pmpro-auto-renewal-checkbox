@@ -26,6 +26,7 @@ var e20rAnnualSubscription = {
         this.select_annual = jQuery('#e20r-annual-pricing-choice');
         this.select_monthly = jQuery('#e20r-monthly-pricing-choice');
         this.annual_levels = this._convert_ints(e20r_annual_pricing.levels); // The Level IDs for the annual level types
+        this.free_levels = this._convert_ints( e20r_annual_pricing.free_levels );
         this.level_map = e20r_annual_pricing.level_map;
 
         var self = this;
@@ -66,6 +67,7 @@ var e20rAnnualSubscription = {
             window.console.log("Row in show_monthly: ", row);
 
             var is_annual = jQuery.inArray(level_id, self.annual_levels);
+            var is_free = jQuery.inArray( level_id, self.free_levels );
 
             // Show the monthly row because the level ID isn't in the array of annual levels
             if ( -1 === is_annual ) {
@@ -73,7 +75,7 @@ var e20rAnnualSubscription = {
             }
 
             // hide row because the level ID IS in the array of annual levels
-            if (-1 < is_annual && true === self.has_monthly( level_id ) ) {
+            if (-1 < is_annual && true === self.has_monthly( level_id ) && -1 === is_free ) {
                 row.hide();
             }
         });
@@ -96,6 +98,7 @@ var e20rAnnualSubscription = {
             var row = self.select_layout_type(level);
 
             var is_annual = jQuery.inArray(level_id, self.annual_levels);
+            var is_free = jQuery.inArray( level_id, self.free_levels );
 
             // Show row because the level ID IS in the array of annual levels
             if (-1 < is_annual && true === self.has_monthly( level_id ) ) {
@@ -104,7 +107,7 @@ var e20rAnnualSubscription = {
             }
 
             // Hide row because the level ID IS NOT in the array of annual levels
-            if (-1 === is_annual && true === self.has_monthly( level_id ) ) {
+            if (-1 === is_annual && true === self.has_monthly( level_id ) && -1 === is_free ) {
                 row.hide();
             }
         });
