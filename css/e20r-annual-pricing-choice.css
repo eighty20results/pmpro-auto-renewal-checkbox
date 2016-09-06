@@ -1,16 +1,46 @@
+p.e20r-annual-pricing-choice-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+input.e20r-annual-pricing {
+    margin: 0 3px 0 10px;
+}
+
+label.e20r-annual-pricing-header {
+    font-size: initial;
+    font-weight: initial;
+}
+
+label.e20r-annual-pricing-header:hover {
+    text-decoration: underline;
+}
+
+.pmpro_checkout tbody tr:nth-child(odd) {
+    background: rgba(242, 242, 242, 1.0) !important;
+}
+
+.pmpro_checkout tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 1.0) !important;
+}
+
 .e20r-annual-pricing-choice-settings {
     display: table;
 }
+
 .e20r-settings-body {
     display: table-row-group;
 }
+
 .e20r-settings-row {
     display: table-row;
 }
+
 .e20r-settings-cell {
     display: table-cell;
     float: left;
 }
+
 .e20r-settings-cell label {
     display: table-caption;
     font-size: 14px;
