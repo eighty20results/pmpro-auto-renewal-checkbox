@@ -338,12 +338,12 @@ class e20rAnnualPricing {
 		}
 		?>
 		<hr />
-		<h3 class="e20r-annual-pricing-choice-header"><?php _e("Annual Pricing Settings", "e20rapc"); ?></h3>
+		<h3 class="e20r-annual-pricing-choice-header"><?php _e("Annual Pricing Choice Settings", "e20rapc"); ?></h3>
 		<div class="e20r-annual-pricing-choice-settings">
 			<div class="e20r-settings-body">
 				<div class="e20r-settings-row">
 					<div class="e20r-settings-cell">
-						<label for="e20r-pricing_choice"><?php _e( "Default selection", "e20rapc" ); ?>:</label>
+						<label for="e20r-pricing_choice"><?php _e( "Default selection:", "e20rapc" ); ?></label>
 					</div>
 					<div class="e20r-settings-cell">
 						<select name="e20r-pricing_choice" class="e20r-pricing_choice">
@@ -359,7 +359,7 @@ class e20rAnnualPricing {
 				<?php if ( true === $is_monthly ) { ?>
 				<div class="e20r-settings-row">
 					<div class="e20r-settings-cell">
-						<label for="e20r-pricing_choice"><?php _e( "Level to pair with:", "e20rapc" ); ?>:</label>
+						<label for="e20r-pricing_choice"><?php _e( "Level to pair with:", "e20rapc" ); ?></label>
 					</div>
 					<div class="e20r-settings-cell">
 						<select name="e20r-pricing_annual" class="e20r-pricing_annual">
@@ -381,7 +381,7 @@ class e20rAnnualPricing {
 				<?php } ?>
 				<div class="e20r-settings-row">
 					<div class="e20r-settings-cell">
-						<label for="e20r-pricing_terminate"><?php _e( "Membership ends", "e20rapc" ); ?>:</label>
+						<label for="e20r-pricing_terminate"><?php _e( "Membership ends:", "e20rapc" ); ?></label>
 					</div>
 					<div class="e20r-settings-cell">
 						<select name="e20r-pricing_terminate" class="e20r-pricing_terminate">
