@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: E20R Annual Pricing Choice for Paid Memberships Pro
-Plugin URI: http://eighty20results.com/wp-plugins/e20r-annual-pricing-choice
+Plugin URI: http://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice
 Description: Allow selecting annual or monthly payment, if Membership levels are configured to support it
-Version: 1.0.1
-Requires: 4.5.0
+Version: 1.1
+Requires: 4.5
 Author: Thomas Sjolshagen <thomas@eighty20results.com>
 Author URI: http://www.eighty20results.com/thomas-sjolshagen/
 License: GPL2
@@ -30,7 +30,7 @@ Text Domain: e20rapc
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-define( 'E20R_ANNUAL_PRICING_VER', '1.0' );
+define( 'E20R_ANNUAL_PRICING_VER', '1.1' );
 
 class e20rAnnualPricing {
 
@@ -130,7 +130,11 @@ class e20rAnnualPricing {
 		// Assign the key/value pair
 		$this->settings[ $level_id ][ $key ] = $value;
 
-		if ( false == update_option( 'e20r_annual_pricing', $this->settings, false ) ) {
+		update_option( 'e20r_annual_pricing', $this->settings, false );
+
+		$test = get_option( 'e20r_annual_pricing' );
+
+		if ( $test[$level_id][$key] != $this->settings[$level_id][$key] ) {
 			$this->set_message( sprintf( __( "Unable to save Annual Pricing Choices settings for %s", "e20rapc" ), $key ), "error" );
 		}
 	}
@@ -731,3 +735,13 @@ class e20rAnnualPricing {
  * Load this plugin
  */
 add_action( 'plugins_loaded', 'e20rAnnualPricing::register', 5 );
+
+if ( ! class_exists( '\\PucFactory' ) ) {
+	require_once( plugin_dir_path( __FILE__ ) . 'plugin-updates/plugin-update-checker.php' );
+}
+
+$plugin_updates = \PucFactory::buildUpdateChecker(
+	'https://eighty20results.com/protected-content/e20r-annual-pricing-choice/metadata.json',
+	__FILE__,
+	'e20r-annual-pricing-choice'
+);
