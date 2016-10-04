@@ -11,7 +11,7 @@
   "homepage": "https://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice/",
   "sections" : {
     "description" : "Allow selecting annual or monthly payment, if Membership levels are configured to support it",
-    "changelog": "<div>This change log contains information about the updates/modifications/fixes created for this add-on.</div><h3>1.1</h3><ol><li>ENH: Add build tools for Plugin</li><li>ENH: Included GPL2 license text</li><li>ENH: Added one-click update support</li><li>ENH: Update version number (1.1)</li><li>BUG: Didn't handle updates of options properly</li></ol>",
+    "changelog": "<div>This change log contains information about the updates/modifications/fixes created for this add-on.</div><h3>1.1</h3><ol><li>ENH: Update CSS for backend</li><li>ENH: Add build tools for Plugin</li><li>ENH: Included GPL2 license text</li><li>ENH: Added one-click update support</li><li>ENH: Update version number (1.1)</li><li>BUG: Didn't handle updates of options properly</li><li>BUG: Clean up backend settings</li></ol>",
     "faq": "<h3>I found a bug in the plugin.</h3>Please report your issue to us by using the <a href='https://eighty20results.com/support-forums/forum/support-forums/e20r-membership-setup-fee-paid-memberships-pro/' target='_blank'>Support Forum</a> on The Eighty / 20 Website, where we try to respond within 1 business day."
     }
 }

@@ -18,12 +18,18 @@ Adds an option to the PMPro membership level selection page: "Payment choice" ("
 1. Edit your membership levels and set the Annual Pricing Choice options for each level.
 
 == Changelog == 
+
 == 1.1 ==
+
+* ENH: Update CSS for backend
 * ENH: Add build tools for Plugin
 * ENH: Included GPL2 license text
 * ENH: Added one-click update support
 * ENH: Update version number (1.1)
 * BUG: Didn't handle updates of options properly
+* BUG: Clean up backend settings
+
 
 == 1.0 ==
+
 * Initial release

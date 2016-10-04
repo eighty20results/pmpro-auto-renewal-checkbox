@@ -1,5 +1,7 @@
+ENH: Update CSS for backend
 ENH: Add build tools for Plugin
 ENH: Included GPL2 license text
 ENH: Added one-click update support
 ENH: Update version number (1.1)
 BUG: Didn't handle updates of options properly
+BUG: Clean up backend settings
