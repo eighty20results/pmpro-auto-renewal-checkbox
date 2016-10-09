@@ -126,7 +126,7 @@ var e20rAnnualSubscription = {
     select_layout_type: function (level) {
         "use strict";
 
-        var is_table = jQuery('table#pmpro_levels_table, table#pmpro_levels');
+        var is_table = jQuery('table#pmpro_annual_levels_table');
         var is_div = jQuery('div#pmpro_levels');
 
         var $row;
