@@ -3,7 +3,7 @@
 Plugin Name: E20R Annual Pricing Choice for Paid Memberships Pro
 Plugin URI: http://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice
 Description: Allow selecting annual or monthly payment, if Membership levels are configured to support it
-Version: 1.1
+Version: 1.2
 Requires: 4.5
 Author: Thomas Sjolshagen <thomas@eighty20results.com>
 Author URI: http://www.eighty20results.com/thomas-sjolshagen/
@@ -30,7 +30,7 @@ Text Domain: e20rapc
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-define( 'E20R_ANNUAL_PRICING_VER', '1.1' );
+define( 'E20R_ANNUAL_PRICING_VER', '1.2' );
 
 class e20rAnnualPricing {
 
@@ -281,6 +281,9 @@ class e20rAnnualPricing {
 	 */
 	private function annual_renewal_html( $level_id = 'default' ) {
 
+		global $pmpro_levels;
+		global $current_user;
+
 		$renewal_choice = $this->get_setting( 'choice', $level_id );
 
 		ob_start();
@@ -296,6 +299,90 @@ class e20rAnnualPricing {
 			<label class="e20r-annual-pricing-header"
 			       for="e20r-annual-pricing-choice"><?php _e( 'Annual', 'e20rapc' ); ?></label>
 			</span></h3>
+		</div>
+		<table id="pmpro_annual_levels_table" class="pmpro_checkout">
+			<thead>
+			<tr>
+				<th><?php _e('Level', 'pmpro');?></th>
+				<th><?php _e('Price', 'pmpro');?></th>
+				<th>&nbsp;</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php
+			$count = 0;
+			$level_map = $this->get_level_map();
+			$monthly_levels = array_keys( $level_map );
+			$annual_levels = array_values( $level_map );
+
+			foreach($pmpro_levels as $k => $level)
+			{
+				if(isset($current_user->membership_level->ID)) {
+					$current_level = ( $current_user->membership_level->ID == $level->id );
+				} else {
+					$current_level = false;
+				}
+
+				if ( in_array( $level->id, $monthly_levels ) || in_array( $level->id, $annual_levels )	) { ?>
+
+					<tr class="<?php if ( $count++ % 2 == 0 ) { ?>odd<?php } ?><?php if ( $current_level == $level ) { ?> active<?php } ?>">
+						<input type="hidden" class="pmpro-level-id" name="pmpro-level-id"
+						       value="<?php echo $level->id ?>"/>
+						<td><?php echo $current_level ? "<strong>{$level->name}</strong>" : $level->name ?></td>
+						<td>
+							<?php
+							if ( pmpro_isLevelFree( $level ) ) {
+								$cost_text = "<strong>" . __( "Free", "pmpro" ) . "</strong>";
+							} else {
+								$cost_text = pmpro_getLevelCost( $level, true, true );
+							}
+							$expiration_text = pmpro_getLevelExpiration( $level );
+							if ( ! empty( $cost_text ) && ! empty( $expiration_text ) ) {
+								echo $cost_text . "<br />" . $expiration_text;
+							} elseif ( ! empty( $cost_text ) ) {
+								echo $cost_text;
+							} elseif ( ! empty( $expiration_text ) ) {
+								echo $expiration_text;
+							}
+							?>
+						</td>
+						<td>
+							<?php if ( empty( $current_user->membership_level->ID ) ) { ?>
+								<a class="pmpro_btn pmpro_btn-select"
+								   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
+							<?php } elseif ( ! $current_level ) { ?>
+								<a class="pmpro_btn pmpro_btn-select"
+								   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
+							<?php } elseif ( $current_level ) { ?>
+
+								<?php
+								//if it's a one-time-payment level, offer a link to renew
+								if ( pmpro_isLevelExpiringSoon( $current_user->membership_level ) && $current_user->membership_level->allow_signups ) {
+									?>
+									<a class="pmpro_btn pmpro_btn-select"
+									   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Renew', 'pmpro' ); ?></a>
+									<?php
+								} else {
+									?>
+									<a class="pmpro_btn disabled"
+									   href="<?php echo pmpro_url( "account" ) ?>"><?php _e( 'Your&nbsp;Level', 'pmpro' ); ?></a>
+									<?php
+								}
+								?>
+
+							<?php } ?>
+						</td>
+					</tr>
+					<?php
+					// Remove the level from the list.
+					unset( $pmpro_levels[$k] );
+				}
+			}
+			?>
+			</tbody>
+		</table> <!-- end of annual pricing levels table -->
+		<div class="e20r-other-levels-header">
+			<h2><?php _e("Other Levels", "e20rapc");?></h2>
 		</div>
 		<?php
 		$html = ob_get_clean();
@@ -348,7 +435,7 @@ class e20rAnnualPricing {
 					<div class="e20r-settings-cell">
 						<select name="e20r-pricing_choice" class="e20r-pricing_choice">
 							<option
-								value="-1" <?php selected( -1, $this->get_setting( 'choice', $level_id ) ); ?>><?php _e( "Not Applicable" ); ?></option>
+								value="exclude" <?php selected( 'exclude', $this->get_setting( 'choice', $level_id ) ); ?>><?php _e( "Excluded" ); ?></option>
 							<option
 								value="monthly" <?php selected( 'monthly', $this->get_setting( 'choice', $level_id ) ); ?>><?php _e( "Monthly" ); ?></option>
 							<option
@@ -467,7 +554,7 @@ class e20rAnnualPricing {
 		$free_levels = array();
 
 		foreach( $levels as $level ) {
-			if (true === pmpro_isLevelFree( $level ) ) {
+			if (true === pmpro_isLevelFree( $level ) || !in_array( $this->get_setting( 'choice', $level->id ), array('monthly', 'annually') ) ) {
 				$free_levels[] = $level->id;
 			}
 		}
