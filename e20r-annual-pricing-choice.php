@@ -3,7 +3,7 @@
 Plugin Name: E20R Annual Pricing Choice for Paid Memberships Pro
 Plugin URI: http://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice
 Description: Allow selecting annual or monthly payment, if Membership levels are configured to support it
-Version: 1.2
+Version: 1.3
 Requires: 4.5
 Author: Thomas Sjolshagen <thomas@eighty20results.com>
 Author URI: http://www.eighty20results.com/thomas-sjolshagen/
@@ -30,7 +30,7 @@ Text Domain: e20rapc
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-define( 'E20R_ANNUAL_PRICING_VER', '1.2' );
+define( 'E20R_ANNUAL_PRICING_VER', '1.3' );
 
 class e20rAnnualPricing {
 
@@ -227,6 +227,10 @@ class e20rAnnualPricing {
 	 */
 	public function strip_configured_levels( $levels ) {
 
+		if (is_admin()) {
+			return $levels;
+		}
+
 		$map = $this->get_level_map();
 		$monthly = array_values( $map );
 		$annual = array_keys( $map );
@@ -404,7 +408,7 @@ class e20rAnnualPricing {
 			</tbody>
 		</table> <!-- end of annual pricing levels table -->
 		<div class="e20r-other-levels-header">
-			<h2><?php _e("Other Levels", "e20rapc");?></h2>
+			<h2><?php echo apply_filters('e20rapc-other-levels-text', __("Membership Levels", "e20rapc") );?></h2>
 		</div>
 		<?php
 		$html = ob_get_clean();
