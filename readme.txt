@@ -19,6 +19,11 @@ Adds an option to the PMPro membership level selection page: "Payment choice" ("
 
 == Changelog == 
 
+== 1.2 ==
+
+* ENH/BUG: Handle excluded membership levels that use annual payment
+* ENH: Split annual/monthly selectable membership levels from the other membership level(s)
+
 == 1.1 ==
 
 * ENH: Update CSS for backend
