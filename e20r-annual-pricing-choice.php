@@ -215,8 +215,30 @@ class e20rAnnualPricing {
 
 			add_filter( 'pmpro_email_body', array( $this, 'cancellation_email_body' ), 10, 2 );
 		}
+
+		add_filter('pmpro_levels_array', array( $this, 'strip_configured_levels'), 10, 1);
 	}
 
+	/**
+	 * Remove the annual/monthly levels from the general "levels" list.
+	 * @param $levels
+	 *
+	 * @return mixed
+	 */
+	public function strip_configured_levels( $levels ) {
+
+		$map = $this->get_level_map();
+		$monthly = array_values( $map );
+		$annual = array_keys( $map );
+
+		foreach( $levels as $key => $level ) {
+			if (in_array( $level->id, $monthly ) || in_array( $level->id, $annual ) ) {
+				unset( $levels[$key]);
+			}
+		}
+
+		return $levels;
+	}
 	/**
 	 * Enqueue and configure JavaScript functionality for the plugin (front or back end)
 	 */
@@ -501,17 +523,11 @@ class e20rAnnualPricing {
 		$template_path = plugin_dir_path( __FILE__ ) . "{$type}/{$page_name}.{$ext}";
 
 		if ( ( 'levels' === $page_name ) && ( file_exists( $template_path )) ){
-			$default_templates = array(
-				$template_path
-			);
-		} else {
-			if(WP_DEBUG) {
-				error_log("Unable to load the {$page_name}.{$ext} template from {$location}");
-			}
+			array_splice($default_templates, 2, 0, $template_path);
 		}
 
 		if (WP_DEBUG) {
-			error_log("Loading {$page_name} template from {$location}: " . print_r($default_templates, true));
+			error_log("Will be loading {$page_name} template from ({$location}): " . print_r($default_templates, true));
 		}
 
 		return $default_templates;
