@@ -1,8 +1,15 @@
-<?php 
+<?php
 global $wpdb, $pmpro_msg, $pmpro_msgt, $current_user;
+global $pmpro_levels;
+global $pmpro_level_order;
 
-$pmpro_levels = pmpro_getAllLevels(false, true);
-$pmpro_level_order = pmpro_getOption('level_order');
+if( empty( $pmpro_levels ) ) {
+	$pmpro_levels = pmpro_getAllLevels( false, true );
+}
+
+if (empty( $pmpro_level_order ) ) {
+	$pmpro_level_order = pmpro_getOption('level_order');
+}
 
 if(!empty($pmpro_level_order))
 {
@@ -64,35 +71,38 @@ if($pmpro_msg)
  *     @type type $var Description.
  * }
  * @param type  $var Description.
- */do_action('pmpro-pre-level-list-display', $pmpro_levels, $pmpro_level_order );
+ */
+do_action('pmpro-pre-level-list-display', $pmpro_levels, $pmpro_level_order );
 ?>
 <table id="pmpro_levels_table" class="pmpro_checkout">
 <thead>
   <tr>
 	<th><?php _e('Level', 'pmpro');?></th>
-	<th><?php _e('Price', 'pmpro');?></th>	
+	<th><?php _e('Price', 'pmpro');?></th>
 	<th>&nbsp;</th>
   </tr>
 </thead>
 <tbody>
-	<?php	
+	<?php
 	$count = 0;
 	foreach($pmpro_levels as $level)
 	{
-	  if(isset($current_user->membership_level->ID))
-		  $current_level = ($current_user->membership_level->ID == $level->id);
-	  else
+	  if(isset($current_user->membership_level->ID)) {
+		  $current_level = ( $current_user->membership_level->ID == $level->id );
+	  } else {
 		  $current_level = false;
+	  }
+
 	?>
 	<tr class="<?php if($count++ % 2 == 0) { ?>odd<?php } ?><?php if($current_level == $level) { ?> active<?php } ?>">
 		<input type="hidden" class="pmpro-level-id" name="pmpro-level-id" value="<?php echo $level->id ?>" />
 		<td><?php echo $current_level ? "<strong>{$level->name}</strong>" : $level->name?></td>
 		<td>
-			<?php 
+			<?php
 				if(pmpro_isLevelFree($level))
 					$cost_text = "<strong>" . __("Free", "pmpro") . "</strong>";
 				else
-					$cost_text = pmpro_getLevelCost($level, true, true); 
+					$cost_text = pmpro_getLevelCost($level, true, true);
 				$expiration_text = pmpro_getLevelExpiration($level);
 				if(!empty($cost_text) && !empty($expiration_text))
 					echo $cost_text . "<br />" . $expiration_text;
@@ -105,12 +115,12 @@ if($pmpro_msg)
 		<td>
 		<?php if(empty($current_user->membership_level->ID)) { ?>
 			<a class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Select', 'pmpro');?></a>
-		<?php } elseif ( !$current_level ) { ?>                	
+		<?php } elseif ( !$current_level ) { ?>
 			<a class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Select', 'pmpro');?></a>
-		<?php } elseif($current_level) { ?>      
-			
+		<?php } elseif($current_level) { ?>
+
 			<?php
-				//if it's a one-time-payment level, offer a link to renew				
+				//if it's a one-time-payment level, offer a link to renew
 				if( pmpro_isLevelExpiringSoon( $current_user->membership_level) && $current_user->membership_level->allow_signups ) {
 					?>
 						<a class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Renew', 'pmpro');?></a>
@@ -121,7 +131,7 @@ if($pmpro_msg)
 					<?php
 				}
 			?>
-			
+
 		<?php } ?>
 		</td>
 	</tr>
