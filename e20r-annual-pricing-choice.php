@@ -102,8 +102,8 @@ class e20rAnnualPricing {
 
 	public function delete_level_settings( $level_id ) {
 
-		if ( !empty( $this->settings[$level_id])) {
-			unset($this->settings[$level_id]);
+		if ( ! empty( $this->settings[ $level_id ] ) ) {
+			unset( $this->settings[ $level_id ] );
 		}
 
 		update_option( 'e20r_annual_pricing', $this->settings, false );
@@ -134,7 +134,7 @@ class e20rAnnualPricing {
 
 		$test = get_option( 'e20r_annual_pricing' );
 
-		if ( $test[$level_id][$key] != $this->settings[$level_id][$key] ) {
+		if ( $test[ $level_id ][ $key ] != $this->settings[ $level_id ][ $key ] ) {
 			$this->set_message( sprintf( __( "Unable to save Annual Pricing Choices settings for %s", "e20rapc" ), $key ), "error" );
 		}
 	}
@@ -160,7 +160,7 @@ class e20rAnnualPricing {
 			'default' => array(
 				'choice'    => apply_filters( 'e20r-renewal-choice-default', 'monthly' ),
 				'terminate' => apply_filters( 'e20r-renewal-choice-end-membership', 'immediately' ),
-				'annual'    => -1,
+				'annual'    => - 1,
 			),
 		);
 	}
@@ -216,33 +216,35 @@ class e20rAnnualPricing {
 			add_filter( 'pmpro_email_body', array( $this, 'cancellation_email_body' ), 10, 2 );
 		}
 
-		add_filter('pmpro_levels_array', array( $this, 'strip_configured_levels'), 10, 1);
+		add_filter( 'pmpro_levels_array', array( $this, 'strip_configured_levels' ), 10, 1 );
 	}
 
 	/**
 	 * Remove the annual/monthly levels from the general "levels" list.
+	 *
 	 * @param $levels
 	 *
 	 * @return mixed
 	 */
 	public function strip_configured_levels( $levels ) {
 
-		if (is_admin()) {
+		if ( is_admin() ) {
 			return $levels;
 		}
 
-		$map = $this->get_level_map();
+		$map     = $this->get_level_map();
 		$monthly = array_values( $map );
-		$annual = array_keys( $map );
+		$annual  = array_keys( $map );
 
-		foreach( $levels as $key => $level ) {
-			if (in_array( $level->id, $monthly ) || in_array( $level->id, $annual ) ) {
-				unset( $levels[$key]);
+		foreach ( $levels as $key => $level ) {
+			if ( in_array( $level->id, $monthly ) || in_array( $level->id, $annual ) ) {
+				unset( $levels[ $key ] );
 			}
 		}
 
 		return $levels;
 	}
+
 	/**
 	 * Enqueue and configure JavaScript functionality for the plugin (front or back end)
 	 */
@@ -259,10 +261,10 @@ class e20rAnnualPricing {
 			wp_register_script( 'e20r-annual-pricing', plugins_url( 'js/e20r-annual-pricing-choice.js', __FILE__ ), array( 'jquery' ), E20R_ANNUAL_PRICING_VER, true );
 
 			wp_localize_script( 'e20r-annual-pricing', 'e20r_annual_pricing', array(
-					'levels'  => $this->annual_levels,
-					'level_map' => $this->get_level_map(),
+					'levels'      => $this->annual_levels,
+					'level_map'   => $this->get_level_map(),
 					'free_levels' => $this->get_free_levels(),
-					'default' => $this->get_setting( 'choice' ),
+					'default'     => $this->get_setting( 'choice' ),
 				)
 			);
 
@@ -285,7 +287,7 @@ class e20rAnnualPricing {
 
 		// Only load the annual/monthly levels style sheets when on the PMPro Levels page
 		// if ( ! is_admin() && isset( $post->ID ) && $post->ID == $pmpro_pages['levels'] ) {
-			wp_enqueue_style( 'e20r-annual-pricing', plugins_url( 'css/e20r-annual-pricing-choice.css', __FILE__ ), null, E20R_ANNUAL_PRICING_VER );
+		wp_enqueue_style( 'e20r-annual-pricing', plugins_url( 'css/e20r-annual-pricing-choice.css', __FILE__ ), null, E20R_ANNUAL_PRICING_VER );
 		//}
 	}
 
@@ -300,7 +302,7 @@ class e20rAnnualPricing {
 	/**
 	 * Generate radio button(s) to select the renewal payment frequency
 	 *
-	 * @param   string|int    $level_id     - The ID of the membership level, or 'default'
+	 * @param   string|int $level_id - The ID of the membership level, or 'default'
 	 *
 	 * @return  string                      - The HTML containing the radio buttons.
 	 *
@@ -311,11 +313,13 @@ class e20rAnnualPricing {
 		global $current_user;
 
 		$renewal_choice = $this->get_setting( 'choice', $level_id );
+		$levels = $pmpro_levels;
 
 		ob_start();
 		?>
 		<div class="e20r-annual-pricing-choice">
-			<h3 class="e20r-annual-pricing-choice-header"><?php echo apply_filters( 'e20r-renewal-choice-header', __( "Payment choice", "e20rapc" ) ); ?>: <span class="e20r-annual-pricing-choices">
+			<h3 class="e20r-annual-pricing-choice-header"><?php echo apply_filters( 'e20r-renewal-choice-header', __( "Payment choice", "e20rapc" ) ); ?>
+				: <span class="e20r-annual-pricing-choices">
 			<input type="radio" id="e20r-monthly-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="monthly" <?php checked( $renewal_choice, 'monthly' ); ?>/>
 			<label class="e20r-annual-pricing-header"
@@ -329,32 +333,41 @@ class e20rAnnualPricing {
 		<table id="pmpro_annual_levels_table" class="pmpro_checkout">
 			<thead>
 			<tr>
-				<th><?php _e('Level', 'pmpro');?></th>
-				<th><?php _e('Price', 'pmpro');?></th>
+				<th><?php _e( 'Level', 'pmpro' ); ?></th>
+				<th><?php _e( 'Price', 'pmpro' ); ?></th>
 				<th>&nbsp;</th>
 			</tr>
 			</thead>
 			<tbody>
 			<?php
-			$count = 0;
-			$level_map = $this->get_level_map();
+			$count          = 0;
+			$level_map      = $this->get_level_map();
 			$monthly_levels = array_keys( $level_map );
-			$annual_levels = array_values( $level_map );
+			$annual_levels  = array_values( $level_map );
 
-			foreach($pmpro_levels as $k => $level)
-			{
-				if(isset($current_user->membership_level->ID)) {
+			if ( WP_DEBUG ) {
+				error_log( "Found " . count( $monthly_levels ) . " monthly levels" );
+				error_log( "Found " . count( $pmpro_levels ) . " levels total" );
+			}
+
+			foreach ( $levels as $k => $level ) {
+
+				if ( isset( $current_user->membership_level->ID ) ) {
 					$current_level = ( $current_user->membership_level->ID == $level->id );
 				} else {
 					$current_level = false;
 				}
 
-				if ( in_array( $level->id, $monthly_levels ) || in_array( $level->id, $annual_levels )	) { ?>
+				if (WP_DEBUG) {
+					error_log("Current Level: {$current_level}");
+				}
 
-					<tr class="<?php if ( $count++ % 2 == 0 ) { ?>odd<?php } ?><?php if ( $current_level == $level ) { ?> active<?php } ?>">
+				if ( in_array( $level->id, $monthly_levels ) || in_array( $level->id, $annual_levels ) ) { ?>
+
+					<tr class="<?php if ( $count ++ % 2 == 0 ) { ?>odd<?php } ?><?php if ( $current_level == $level ) { ?> active<?php } ?>">
 						<input type="hidden" class="pmpro-level-id" name="pmpro-level-id"
-						       value="<?php echo $level->id ?>"/>
-						<td><?php echo $current_level ? "<strong>{$level->name}</strong>" : $level->name ?></td>
+						       value="<?php echo $level->id; ?>"/>
+						<td><?php echo ! empty( $current_level ) ? "<strong>{$level->name}</strong>" : $level->name; ?></td>
 						<td>
 							<?php
 							if ( pmpro_isLevelFree( $level ) ) {
@@ -375,10 +388,10 @@ class e20rAnnualPricing {
 						<td>
 							<?php if ( empty( $current_user->membership_level->ID ) ) { ?>
 								<a class="pmpro_btn pmpro_btn-select"
-								   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
+								   href="<?php echo add_query_arg( 'level', $level->id, pmpro_url( "checkout", null, "https" ) ); ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
 							<?php } elseif ( ! $current_level ) { ?>
 								<a class="pmpro_btn pmpro_btn-select"
-								   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
+								   href="<?php echo add_query_arg( 'level', $level->id, pmpro_url( "checkout", null, "https" ) ); ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
 							<?php } elseif ( $current_level ) { ?>
 
 								<?php
@@ -386,7 +399,7 @@ class e20rAnnualPricing {
 								if ( pmpro_isLevelExpiringSoon( $current_user->membership_level ) && $current_user->membership_level->allow_signups ) {
 									?>
 									<a class="pmpro_btn pmpro_btn-select"
-									   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Renew', 'pmpro' ); ?></a>
+									   href="<?php echo add_query_arg( 'level', $level->id, pmpro_url( "checkout", null, "https" ) ); ?>"><?php _e( 'Renew', 'pmpro' ); ?></a>
 									<?php
 								} else {
 									?>
@@ -401,17 +414,19 @@ class e20rAnnualPricing {
 					</tr>
 					<?php
 					// Remove the level from the list.
-					unset( $pmpro_levels[$k] );
+					unset( $levels[ $k ] );
 				}
 			}
 			?>
 			</tbody>
 		</table> <!-- end of annual pricing levels table -->
 		<div class="e20r-other-levels-header">
-			<h2><?php echo apply_filters('e20rapc-other-levels-text', __("Membership Levels", "e20rapc") );?></h2>
+			<h2><?php echo apply_filters( 'e20rapc-other-levels-text', __( "Membership Levels", "e20rapc" ) ); ?></h2>
 		</div>
 		<?php
 		$html = ob_get_clean();
+
+		$pmpro_levels = $levels;
 
 		return $html;
 	}
@@ -421,16 +436,17 @@ class e20rAnnualPricing {
 	 */
 	private function get_level_map() {
 
-		$level_map = array();
-		$all_levels = pmpro_getAllLevels( true );
+		$level_map  = array();
+		$all_levels = pmpro_getAllLevels( false, true );
 
 		// Find all monthly levels & map their annual equivalent
-		foreach( $all_levels as $id => $level ) {
+		foreach ( $all_levels as $id => $level ) {
 
-			if ( $level->cycle_number > 0 && 'month' === strtolower( $level->cycle_period) ) {
-				$level_map[$level->id] = $this->get_setting( 'annual', $level->id );
+			if ( $level->cycle_number > 0 && 'month' === strtolower( $level->cycle_period ) ) {
+				$level_map[ $level->id ] = $this->get_setting( 'annual', $level->id );
 			}
 		}
+
 		return $level_map;
 	}
 
@@ -439,19 +455,19 @@ class e20rAnnualPricing {
 	 */
 	public function add_level_settings() {
 
-		$level_id = isset($_REQUEST['edit'] ) ? intval($_REQUEST['edit']) : 'default';
+		$level_id   = isset( $_REQUEST['edit'] ) ? intval( $_REQUEST['edit'] ) : 'default';
 		$is_monthly = false;
 
 		$this->get_annual_levels();
 
 		if ( is_numeric( $level_id ) ) {
 
-			$levels = pmpro_getAllLevels( true );
-			$is_monthly = ( $levels[$level_id]->cycle_number > 0 && 'month' === strtolower( $levels[$level_id]->cycle_period) ? true : false );
+			$levels     = pmpro_getAllLevels( true );
+			$is_monthly = ( $levels[ $level_id ]->cycle_number > 0 && 'month' === strtolower( $levels[ $level_id ]->cycle_period ) ? true : false );
 		}
 		?>
-		<hr />
-		<h3 class="e20r-annual-pricing-choice-header"><?php _e("Annual Pricing Choice Settings", "e20rapc"); ?></h3>
+		<hr/>
+		<h3 class="e20r-annual-pricing-choice-header"><?php _e( "Annual Pricing Choice Settings", "e20rapc" ); ?></h3>
 		<div class="e20r-annual-pricing-choice-settings">
 			<div class="e20r-settings-body">
 				<div class="e20r-settings-row">
@@ -470,27 +486,29 @@ class e20rAnnualPricing {
 					</div>
 				</div>
 				<?php if ( true === $is_monthly ) { ?>
-				<div class="e20r-settings-row">
-					<div class="e20r-settings-cell">
-						<label for="e20r-pricing_choice"><?php _e( "Level to pair with:", "e20rapc" ); ?></label>
-					</div>
-					<div class="e20r-settings-cell">
-						<select name="e20r-pricing_annual" class="e20r-pricing_annual">
-							<option value="-1" <?php selected( -1, $this->get_setting( 'annual', $level_id ) ); ?>><?php _e( "Not Applicable" ); ?></option>
-							<?php
-							foreach( $this->annual_levels as $a_id ) {
-								$level_info = pmpro_getLevel( $a_id ); ?>
-							<option value="<?php echo $a_id; ?>" <?php selected( $a_id, $this->get_setting( 'annual', $level_id ) ); ?>>
-								<?php esc_attr_e( $level_info->name ); ?>
-							</option>
-							<?php
-							}
+					<div class="e20r-settings-row">
+						<div class="e20r-settings-cell">
+							<label for="e20r-pricing_choice"><?php _e( "Level to pair with:", "e20rapc" ); ?></label>
+						</div>
+						<div class="e20r-settings-cell">
+							<select name="e20r-pricing_annual" class="e20r-pricing_annual">
+								<option
+									value="-1" <?php selected( - 1, $this->get_setting( 'annual', $level_id ) ); ?>><?php _e( "Not Applicable" ); ?></option>
+								<?php
+								foreach ( $this->annual_levels as $a_id ) {
+									$level_info = pmpro_getLevel( $a_id ); ?>
+									<option
+										value="<?php echo $a_id; ?>" <?php selected( $a_id, $this->get_setting( 'annual', $level_id ) ); ?>>
+										<?php esc_attr_e( $level_info->name ); ?>
+									</option>
+									<?php
+								}
 
-							?>
+								?>
 
-						</select>
+							</select>
+						</div>
 					</div>
-				</div>
 				<?php } ?>
 				<div class="e20r-settings-row">
 					<div class="e20r-settings-cell">
@@ -526,12 +544,12 @@ class e20rAnnualPricing {
 
 		$template_path = plugin_dir_path( __FILE__ ) . "{$type}/{$page_name}.{$ext}";
 
-		if ( ( 'levels' === $page_name ) && ( file_exists( $template_path )) ){
-			array_splice($default_templates, 2, 0, $template_path);
+		if ( ( 'levels' === $page_name ) && ( file_exists( $template_path ) ) ) {
+			array_splice( $default_templates, 2, 0, $template_path );
 		}
 
-		if (WP_DEBUG) {
-			error_log("Will be loading {$page_name} template from ({$location}): " . print_r($default_templates, true));
+		if ( WP_DEBUG ) {
+			error_log( "Will be loading {$page_name} template from ({$location}): " . print_r( $default_templates, true ) );
 		}
 
 		return $default_templates;
@@ -570,11 +588,15 @@ class e20rAnnualPricing {
 	 */
 	public function get_free_levels() {
 
-		$levels = pmpro_getAllLevels(true);
+		$levels      = pmpro_getAllLevels( false, true );
 		$free_levels = array();
 
-		foreach( $levels as $level ) {
-			if (true === pmpro_isLevelFree( $level ) || !in_array( $this->get_setting( 'choice', $level->id ), array('monthly', 'annually') ) ) {
+		foreach ( $levels as $level ) {
+			if ( true === pmpro_isLevelFree( $level ) || ! in_array( $this->get_setting( 'choice', $level->id ), array(
+					'monthly',
+					'annually'
+				) )
+			) {
 				$free_levels[] = $level->id;
 			}
 		}
