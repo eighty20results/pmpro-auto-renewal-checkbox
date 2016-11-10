@@ -73,12 +73,12 @@ if ( $pmpro_msg ) {
  *
  * @param type $var Description.
  */
-do_action( 'pmpro-pre-level-list-display', $pmpro_levels, $pmpro_level_order );
+do_action( 'pmpro-pre-level-list-display' );
 
 $pmpro_levels = apply_filters( "pmpro_levels_array", $pmpro_levels );
 
-if ( ! is_plugin_active( 'pmpro-multiple-memberships-per-user/pmpro-multiple-memberships-per-user.php' ) &&
-     ( ! is_plugin_active( 'pmpro-advanced-levels-shortcode/pmpro-advanced-levels-shortcode.php' ) || false === stripos( $post->post_content, '[pmpro_advanced_levels' ) )
+if ( ! function_exists( 'pmprommpu_add_group' ) &&
+     ( ! function_exists( 'pmpro_advanced_levels_shortcode' ) || false === stripos( $post->post_content, '[pmpro_advanced_levels' ) )
 ) {
 	?>
 	<table id="pmpro_levels_table" class="pmpro_checkout">
@@ -154,7 +154,7 @@ if ( ! is_plugin_active( 'pmpro-multiple-memberships-per-user/pmpro-multiple-mem
 	</table><?php
 }
 
-if ( is_plugin_active( 'pmpro-multiple-memberships-per-user/pmpro-multiple-memberships-per-user.php' ) ) {
+if ( function_exists( 'pmprommpu_add_group' ) ) {
 
 	add_filter( 'pmpro_pages_custom_template_path', 'e20r_remove_annual_levels_page', 99, 5 );
 
