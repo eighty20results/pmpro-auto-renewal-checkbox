@@ -3,7 +3,7 @@
 Plugin Name: E20R Annual Pricing Choice for Paid Memberships Pro
 Plugin URI: http://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice
 Description: Allow selecting annual or monthly payment, if Membership levels are configured to support it
-Version: 1.3
+Version: 1.4
 Requires: 4.5
 Author: Thomas Sjolshagen <thomas@eighty20results.com>
 Author URI: http://www.eighty20results.com/thomas-sjolshagen/

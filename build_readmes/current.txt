@@ -1,2 +1,5 @@
-ENH/BUG: Handle excluded membership levels that use annual payment
-ENH: Split annual/monthly selectable membership levels from the other membership level(s)
+BUG: Would sometimes loop too many times while processing levels
+BUG: Would sometimes fail with fatal error during plugin check(s).
+BUG: Would sometimes load too many levels BUG: Work around change in behavior for pmpro_getAllLevels()
+ENH: Use WP specific query argument handlers
+ENH: WordPress style changes

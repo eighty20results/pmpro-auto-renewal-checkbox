@@ -1,17 +1,17 @@
 {
   "name" : "Eighty/20 Results - Annual Pricing Choice for Paid Memberships Pro",
   "slug" : "e20r-annual-pricing-choice",
-  "download_url" : "https://eighty20results.com/protected-content/e20r-annual-pricing-choice/e20r-annual-pricing-choice-1.2.zip",
-  "version" : "1.2",
+  "download_url" : "https://eighty20results.com/protected-content/e20r-annual-pricing-choice/e20r-annual-pricing-choice-1.4.zip",
+  "version" : "1.4",
   "tested": "4.6.1",
   "requires": "3.9",
   "author" : "Thomas Sjolshagen <thomas@eighty20results.com>",
   "author_homepage": "https://eighty20results.com/thomas-sjolshagen",
-  "last_updated": "2016-10-09 12:00:00",
+  "last_updated": "2016-11-10 15:00:00",
   "homepage": "https://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice/",
   "sections" : {
     "description" : "Allow selecting annual or monthly payment, if Membership levels are configured to support it",
-    "changelog": "<div>This change log contains information about the updates/modifications/fixes created for this add-on.</div><h3>1.2</h3><ol><li>ENH/BUG: Handle excluded membership levels that use annual payment</li><li>ENH: Split annual/monthly selectable membership levels from the other membership level(s)</li></ol><h3>1.1</h3><ol><li>ENH: Update CSS for backend</li><li>ENH: Add build tools for Plugin</li><li>ENH: Included GPL2 license text</li><li>ENH: Added one-click update support</li><li>ENH: Update version number (1.1)</li><li>BUG: Didn't handle updates of options properly</li><li>BUG: Clean up backend settings</li></ol>",
+    "changelog": "<div>This change log contains information about the updates/modifications/fixes created for this add-on.</div><h3>1.4</h3><ol><li>BUG: Would sometimes loop too many times while processing levels</li><li>BUG: Would sometimes fail with fatal error during plugin check(s).</li><li>BUG: Would sometimes load too many levels BUG: Work around change in behavior for pmpro_getAllLevels()</li><li>ENH: Use WP specific query argument handlers</li><li>ENH: WordPress style changes</li></ol><h3>1.3</h3><ol><li>BUG: Wouldn't always display all levels during management operations</li><li>BUG: Only process the Annual Pricing choice list</li><li>ENH: Support pmpro_levels_array filter</li><li>ENH: Remove levels handled by this add-on from the general levels list.</li><li>ENH: Add support for handling Advanced Levels Shortcode add-on</li><li>ENH: Add support for handling Multiple Membership Levels per User add-on</li></ol><h3>1.2</h3><ol><li>ENH/BUG: Handle excluded membership levels that use annual payment</li><li>ENH: Split annual/monthly selectable membership levels from the other membership level(s)</li></ol><h3>1.1</h3><ol><li>ENH: Update CSS for backend</li><li>ENH: Add build tools for Plugin</li><li>ENH: Included GPL2 license text</li><li>ENH: Added one-click update support</li><li>ENH: Update version number (1.1)</li><li>BUG: Didn't handle updates of options properly</li><li>BUG: Clean up backend settings</li></ol>",
     "faq": "<h3>I found a bug in the plugin.</h3>Please report your issue to us by using the <a href='https://eighty20results.com/support-forums/forum/support-forums/e20r-membership-setup-fee-paid-memberships-pro/' target='_blank'>Support Forum</a> on The Eighty / 20 Website, where we try to respond within 1 business day."
     }
 }
