@@ -362,8 +362,11 @@ class e20rAnnualPricing {
 					error_log("Current Level: {$current_level}");
 				}
 
-				if ( in_array( $level->id, $monthly_levels ) || in_array( $level->id, $annual_levels ) ) { ?>
+				if ( in_array( $level->id, $monthly_levels ) || in_array( $level->id, $annual_levels ) ) {
 
+					// Remove the level from the list.
+					unset( $levels[ $k ] );
+					?>
 					<tr class="<?php if ( $count ++ % 2 == 0 ) { ?>odd<?php } ?><?php if ( $current_level == $level ) { ?> active<?php } ?>">
 						<input type="hidden" class="pmpro-level-id" name="pmpro-level-id"
 						       value="<?php echo $level->id; ?>"/>
@@ -413,8 +416,6 @@ class e20rAnnualPricing {
 						</td>
 					</tr>
 					<?php
-					// Remove the level from the list.
-					unset( $levels[ $k ] );
 				}
 			}
 			?>
@@ -427,6 +428,10 @@ class e20rAnnualPricing {
 		$html = ob_get_clean();
 
 		$pmpro_levels = $levels;
+
+		if ( WP_DEBUG ) {
+			error_log( "Now ready to process " . count( $pmpro_levels ) . " levels total" );
+		}
 
 		return $html;
 	}
