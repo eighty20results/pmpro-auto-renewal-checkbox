@@ -358,10 +358,6 @@ class e20rAnnualPricing {
 					$current_level = false;
 				}
 
-				if (WP_DEBUG) {
-					error_log("Current Level: {$current_level}");
-				}
-
 				if ( in_array( $level->id, $monthly_levels ) || in_array( $level->id, $annual_levels ) ) {
 
 					// Remove the level from the list.
