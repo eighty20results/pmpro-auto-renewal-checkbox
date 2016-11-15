@@ -56,3 +56,16 @@ select.e20r-pricing_choice {
     height: 30px;
     display: table-cell;
 }
+#pmpro_annual_levels_table th:nth-child(1),
+#pmpro_levels_table th:nth-child(1) {
+    width: 25%;
+}
+#pmpro_annual_levels_table th:nth-child(2),
+#pmpro_levels_table th:nth-child(2) {
+    width: 65%;
+}
+#pmpro_annual_levels_table th:nth-child(3),
+#pmpro_levels_table th:nth-child(3) {
+    width: 10%;
+    float: right;
+}
