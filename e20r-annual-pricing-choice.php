@@ -3,14 +3,14 @@
 Plugin Name: E20R Annual Pricing Choice for Paid Memberships Pro
 Plugin URI: http://eighty20results.com/wordpress-plugins/e20r-annual-pricing-choice
 Description: Allow selecting annual or monthly payment, if Membership levels are configured to support it
-Version: 1.4
+Version: 1.6
 Requires: 4.5
 Author: Thomas Sjolshagen <thomas@eighty20results.com>
 Author URI: http://www.eighty20results.com/thomas-sjolshagen/
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Domain Path: /languages
-Text Domain: e20rapc
+Text Domain: e20r-annual-pricing-choice
 */
 /**
  * Copyright (C) 2016  Thomas Sjolshagen - Eighty / 20 Results by Wicked Strong Chicks, LLC
@@ -30,13 +30,16 @@ Text Domain: e20rapc
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-define( 'E20R_ANNUAL_PRICING_VER', '1.3' );
+define( 'E20R_ANNUAL_PRICING_VER', '1.6' );
 
 class e20rAnnualPricing {
 
 	private $annual_levels = array();
 	private $settings;
 
+	/**
+	 * e20rAnnualPricing constructor.
+	 */
 	public function __construct() {
 
 	}
@@ -58,9 +61,9 @@ class e20rAnnualPricing {
 		add_action( 'wp_enqueue_scripts', array( $plugin, 'load_javascript' ) );
 		add_action( 'wp_enqueue_scripts', array( $plugin, 'load_css' ) );
 		add_action( 'admin_enqueue_scripts', array( $plugin, 'load_css' ) );
-		add_action( 'pmpro-pre-level-list-display', array( $plugin, 'show_renewal_options' ) );
+        add_action( 'pmpro-pre-level-list-display', array( $plugin, 'show_renewal_options' ) );
 
-		add_action( 'pmpro_membership_level_after_other_settings', array( $plugin, 'add_level_settings' ) );
+        add_action( 'pmpro_membership_level_after_other_settings', array( $plugin, 'add_level_settings' ) );
 		add_action( 'pmpro_save_membership_level', array( $plugin, 'save_level_settings' ) );
 		add_action( 'pmpro_delete_membership_level', array( $plugin, 'delete_level_settings' ) );
 
@@ -135,7 +138,7 @@ class e20rAnnualPricing {
 		$test = get_option( 'e20r_annual_pricing' );
 
 		if ( $test[ $level_id ][ $key ] != $this->settings[ $level_id ][ $key ] ) {
-			$this->set_message( sprintf( __( "Unable to save Annual Pricing Choices settings for %s", "e20rapc" ), $key ), "error" );
+			$this->set_message( sprintf( __( "Unable to save Annual Pricing Choices settings for %s", "e20r-annual-pricing-choice" ), $key ), "error" );
 		}
 	}
 
@@ -185,18 +188,18 @@ class e20rAnnualPricing {
 	 */
 	function load_translation() {
 
-		$locale = apply_filters( "plugin_locale", get_locale(), "e20rapc" );
-		$mo     = "e20rapc-{$locale}.mo";
+		$locale = apply_filters( "plugin_locale", get_locale(), "e20r-annual-pricing-choice" );
+		$mo     = "e20r-annual-pricing-choice-{$locale}.mo";
 
 		//paths to local (plugin) and global (WP) language files
 		$local_mo  = plugin_dir_path( __FILE__ ) . "/languages/{$mo}";
-		$global_mo = WP_LANG_DIR . "/e20rapc/{$mo}";
+		$global_mo = WP_LANG_DIR . "/e20r-annual-pricing-choice/{$mo}";
 
 		//load global first
-		load_textdomain( "e20rapc", $global_mo );
+		load_textdomain( "e20r-annual-pricing-choice", $global_mo );
 
 		//load local second
-		load_textdomain( "e20rapc", $local_mo );
+		load_textdomain( "e20r-annual-pricing-choice", $local_mo );
 	}
 
 	/**
@@ -315,26 +318,30 @@ class e20rAnnualPricing {
 		$renewal_choice = $this->get_setting( 'choice', $level_id );
 		$levels = $pmpro_levels;
 
+		if ( empty( $levels ) ) {
+		    return null;
+        }
+
 		ob_start();
 		?>
 		<div class="e20r-annual-pricing-choice">
-			<h3 class="e20r-annual-pricing-choice-header"><?php echo apply_filters( 'e20r-renewal-choice-header', __( "Payment choice", "e20rapc" ) ); ?>
+			<h3 class="e20r-annual-pricing-choice-header"><?php echo apply_filters( 'e20r-renewal-choice-header', __( "Payment choice", "e20r-annual-pricing-choice" ) ); ?>
 				: <span class="e20r-annual-pricing-choices">
 			<input type="radio" id="e20r-monthly-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="monthly" <?php checked( $renewal_choice, 'monthly' ); ?>/>
 			<label class="e20r-annual-pricing-header"
-			       for="e20r-annual-pricing-choice"><?php _e( 'Monthly', 'e20rapc' ); ?></label>
+			       for="e20r-annual-pricing-choice"><?php echo apply_filters( 'e20r-renewal-choice-monthly-label' , __( 'Monthly', 'e20r-annual-pricing-choice' ) ); ?></label>
 			<input type="radio" id="e20r-annual-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="annually" <?php checked( $renewal_choice, 'annually' ); ?>/>
 			<label class="e20r-annual-pricing-header"
-			       for="e20r-annual-pricing-choice"><?php _e( 'Annual', 'e20rapc' ); ?></label>
+			       for="e20r-annual-pricing-choice"><?php apply_filters( 'e20r-renewal-choice-annual-label' ,__( 'Annual', 'e20r-annual-pricing-choice' ) ); ?></label>
 			</span></h3>
 		</div>
 		<table id="pmpro_annual_levels_table" class="pmpro_checkout">
 			<thead>
 			<tr>
-				<th><?php _e( 'Level', 'pmpro' ); ?></th>
-				<th><?php _e( 'Price', 'pmpro' ); ?></th>
+				<th><?php echo apply_filters( 'e20r-renewal-choice-level-label', __( 'Level', 'paid-memberships-pro' ) ); ?></th>
+				<th><?php echo apply_filters( 'e20r-renewal-choice-price-label',__( 'Price', 'paid-memberships-pro' ) ); ?></th>
 				<th>&nbsp;</th>
 			</tr>
 			</thead>
@@ -370,7 +377,7 @@ class e20rAnnualPricing {
 						<td>
 							<?php
 							if ( pmpro_isLevelFree( $level ) ) {
-								$cost_text = "<strong>" . __( "Free", "pmpro" ) . "</strong>";
+								$cost_text = "<strong>" . apply_filters( 'e20r-renewal-choice-free-label', __( "Free", "paid-memberships-pro" ) ) . "</strong>";
 							} else {
 								$cost_text = pmpro_getLevelCost( $level, true, true );
 							}
@@ -398,12 +405,12 @@ class e20rAnnualPricing {
 								if ( pmpro_isLevelExpiringSoon( $current_user->membership_level ) && $current_user->membership_level->allow_signups ) {
 									?>
 									<a class="pmpro_btn pmpro_btn-select"
-									   href="<?php echo add_query_arg( 'level', $level->id, pmpro_url( "checkout", null, "https" ) ); ?>"><?php _e( 'Renew', 'pmpro' ); ?></a>
+									   href="<?php echo add_query_arg( 'level', $level->id, pmpro_url( "checkout", null, "https" ) ); ?>"><?php _e( 'Renew', 'paid-memberships-pro' ); ?></a>
 									<?php
 								} else {
 									?>
 									<a class="pmpro_btn disabled"
-									   href="<?php echo pmpro_url( "account" ) ?>"><?php _e( 'Your&nbsp;Level', 'pmpro' ); ?></a>
+									   href="<?php echo pmpro_url( "account" ) ?>"><?php _e( 'Your&nbsp;Level', 'paid-memberships-pro' ); ?></a>
 									<?php
 								}
 								?>
@@ -417,9 +424,11 @@ class e20rAnnualPricing {
 			?>
 			</tbody>
 		</table> <!-- end of annual pricing levels table -->
+        <?php if ( !empty( $levels ) ) { ?>
 		<div class="e20r-other-levels-header">
-			<h2><?php echo apply_filters( 'e20rapc-other-levels-text', __( "Membership Levels", "e20rapc" ) ); ?></h2>
+			<h2><?php echo apply_filters( 'e20rapc-other-levels-text', __( "Membership Levels", "e20r-annual-pricing-choice" ) ); ?></h2>
 		</div>
+    <?php } ?>
 		<?php
 		$html = ob_get_clean();
 
@@ -468,12 +477,12 @@ class e20rAnnualPricing {
 		}
 		?>
 		<hr/>
-		<h3 class="e20r-annual-pricing-choice-header"><?php _e( "Annual Pricing Choice Settings", "e20rapc" ); ?></h3>
+		<h3 class="e20r-annual-pricing-choice-header"><?php _e( "Annual Pricing Choice Settings", "e20r-annual-pricing-choice" ); ?></h3>
 		<div class="e20r-annual-pricing-choice-settings">
 			<div class="e20r-settings-body">
 				<div class="e20r-settings-row">
 					<div class="e20r-settings-cell">
-						<label for="e20r-pricing_choice"><?php _e( "Default selection:", "e20rapc" ); ?></label>
+						<label for="e20r-pricing_choice"><?php _e( "Default selection:", "e20r-annual-pricing-choice" ); ?></label>
 					</div>
 					<div class="e20r-settings-cell">
 						<select name="e20r-pricing_choice" class="e20r-pricing_choice">
@@ -489,7 +498,7 @@ class e20rAnnualPricing {
 				<?php if ( true === $is_monthly ) { ?>
 					<div class="e20r-settings-row">
 						<div class="e20r-settings-cell">
-							<label for="e20r-pricing_choice"><?php _e( "Level to pair with:", "e20rapc" ); ?></label>
+							<label for="e20r-pricing_choice"><?php _e( "Level to pair with:", "e20r-annual-pricing-choice" ); ?></label>
 						</div>
 						<div class="e20r-settings-cell">
 							<select name="e20r-pricing_annual" class="e20r-pricing_annual">
@@ -513,7 +522,7 @@ class e20rAnnualPricing {
 				<?php } ?>
 				<div class="e20r-settings-row">
 					<div class="e20r-settings-cell">
-						<label for="e20r-pricing_terminate"><?php _e( "Membership ends:", "e20rapc" ); ?></label>
+						<label for="e20r-pricing_terminate"><?php _e( "Membership ends:", "e20r-annual-pricing-choice" ); ?></label>
 					</div>
 					<div class="e20r-settings-cell">
 						<select name="e20r-pricing_terminate" class="e20r-pricing_terminate">
@@ -822,7 +831,7 @@ class e20rAnnualPricing {
 		if ( 'pmpro' === $domain && 'Your membership has been cancelled.' === $text ) {
 
 			$next_payment_date = date_i18n( get_option( "date_format" ), pmpro_next_payment( $current_user->ID, "cancelled" ) );
-			$translated_text   = sprintf( __( "Your subscription has been cancelled. Your access will expire on %s", "e20rapc" ), $next_payment_date );
+			$translated_text   = sprintf( __( "Your subscription has been cancelled. Your access will expire on %s", "e20r-annual-pricing-choice" ), $next_payment_date );
 		}
 
 		return $translated_text;
@@ -851,7 +860,7 @@ class e20rAnnualPricing {
 
 					$enddate = date_i18n( get_option( "date_format" ), $expiration_date );
 
-					$body .= "<p>" . sprintf( __( "Your subscription has been cancelled. Your access will expire on %s", "e20rapc" ), $enddate ) . "</p>";
+					$body .= "<p>" . sprintf( __( "Your subscription has been cancelled. Your access will expire on %s", "e20r-annual-pricing-choice" ), $enddate ) . "</p>";
 				}
 			}
 		}
