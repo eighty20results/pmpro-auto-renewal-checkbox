@@ -1,4 +1,21 @@
 <?php
+/**
+ * Copyright (C) 2016  Thomas Sjolshagen - Eighty / 20 Results by Wicked Strong Chicks, LLC
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 global $wpdb, $pmpro_msg, $pmpro_msgt, $current_user;
 global $pmpro_levels;
 global $pmpro_level_order;
@@ -32,6 +49,15 @@ if ( $pmpro_msg ) {
 	?>
 	<div class="pmpro_message <?php echo $pmpro_msgt ?>"><?php echo $pmpro_msg ?></div>
 	<?php
+}
+
+if ( false === apply_filters('e20rapc-remaining-levels-after', true ) ) {
+	if ( function_exists( 'pmprommpu_add_group' ) ) {
+
+		add_filter( 'pmpro_pages_custom_template_path', 'e20r_remove_annual_levels_page', 99, 5 );
+
+		echo pmpro_loadTemplate( 'levels', 'local', 'pages', 'php' );
+	}
 }
 
 /**
@@ -85,8 +111,7 @@ if ( ! function_exists( 'pmprommpu_add_group' ) &&
 	<thead>
 	<tr>
 		<th><?php _e( 'Level', 'pmpro' ); ?></th>
-		<th><?php _e( 'Price', 'pmpro' ); ?></th>
-		<th>&nbsp;</th>
+		<th colspan="2"><?php _e( 'Price', 'paid-memberships-pro' ); ?></th>
 	</tr>
 	</thead>
 	<tbody>
@@ -106,7 +131,7 @@ if ( ! function_exists( 'pmprommpu_add_group' ) &&
 			<td>
 				<?php
 				if ( pmpro_isLevelFree( $level ) ) {
-					$cost_text = "<strong>" . __( "Free", "pmpro" ) . "</strong>";
+					$cost_text = "<strong>" . __( "Free", "paid-memberships-pro" ) . "</strong>";
 				} else {
 					$cost_text = pmpro_getLevelCost( $level, true, true );
 				}
@@ -123,10 +148,10 @@ if ( ! function_exists( 'pmprommpu_add_group' ) &&
 			<td>
 				<?php if ( empty( $current_user->membership_level->ID ) ) { ?>
 					<a class="pmpro_btn pmpro_btn-select"
-					   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
+					   href="<?php echo add_query_arg( "level", $level->id, pmpro_url( "checkout" ) ); ?>"><?php _e( 'Select', 'paid-memberships-pro' ); ?></a>
 				<?php } elseif ( ! $current_level ) { ?>
 					<a class="pmpro_btn pmpro_btn-select"
-					   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Select', 'pmpro' ); ?></a>
+					   href="<?php echo add_query_arg( "level", $level->id, pmpro_url( "checkout" ) ); ?>"><?php _e( 'Select', 'paid-memberships-pro' ); ?></a>
 				<?php } elseif ( $current_level ) { ?>
 
 					<?php
@@ -134,12 +159,12 @@ if ( ! function_exists( 'pmprommpu_add_group' ) &&
 					if ( pmpro_isLevelExpiringSoon( $current_user->membership_level ) && $current_user->membership_level->allow_signups ) {
 						?>
 						<a class="pmpro_btn pmpro_btn-select"
-						   href="<?php echo pmpro_url( "checkout", "?level=" . $level->id, "https" ) ?>"><?php _e( 'Renew', 'pmpro' ); ?></a>
+						   href="<?php echo add_query_arg( "level", $level->id, pmpro_url( "checkout" ) ); ?>"><?php _e( 'Renew', 'paid-memberships-pro' ); ?></a>
 						<?php
 					} else {
 						?>
 						<a class="pmpro_btn disabled"
-						   href="<?php echo pmpro_url( "account" ) ?>"><?php _e( 'Your&nbsp;Level', 'pmpro' ); ?></a>
+						   href="<?php echo pmpro_url( "account" ) ?>"><?php _e( 'Your&nbsp;Level', 'paid-memberships-pro' ); ?></a>
 						<?php
 					}
 					?>
@@ -154,19 +179,21 @@ if ( ! function_exists( 'pmprommpu_add_group' ) &&
 	</table><?php
 }
 
-if ( function_exists( 'pmprommpu_add_group' ) ) {
+if ( false === apply_filters('e20rapc-remaining-levels-after', true ) ) {
+	if ( function_exists( 'pmprommpu_add_group' ) ) {
 
-	add_filter( 'pmpro_pages_custom_template_path', 'e20r_remove_annual_levels_page', 99, 5 );
+		add_filter( 'pmpro_pages_custom_template_path', 'e20r_remove_annual_levels_page', 99, 5 );
 
-	echo pmpro_loadTemplate( 'levels', 'local', 'pages', 'php' );
+		echo pmpro_loadTemplate( 'levels', 'local', 'pages', 'php' );
+	}
 }
 ?>
 <nav id="nav-below" class="navigation" role="navigation">
 	<div class="nav-previous alignleft">
 		<?php if ( ! empty( $current_user->membership_level->ID ) ) { ?>
-			<a href="<?php echo pmpro_url( "account" ) ?>"><?php _e( '&larr; Return to Your Account', 'pmpro' ); ?></a>
+			<a href="<?php echo pmpro_url( "account" ) ?>"><?php _e( '&larr; Return to Your Account', 'paid-memberships-pro' ); ?></a>
 		<?php } else { ?>
-			<a href="<?php echo home_url() ?>"><?php _e( '&larr; Return to Home', 'pmpro' ); ?></a>
+			<a href="<?php echo home_url() ?>"><?php _e( '&larr; Return to Home', 'paid-memberships-pro' ); ?></a>
 		<?php } ?>
 	</div>
 </nav>
