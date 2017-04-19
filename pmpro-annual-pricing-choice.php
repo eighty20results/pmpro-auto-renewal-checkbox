@@ -286,7 +286,7 @@ class e20rAnnualPricing {
 			<input type="radio" id="e20r-monthly-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="monthly" <?php checked( $renewal_choice, 'monthly' ); ?>/>
 			<label class="e20r-annual-pricing-header"
-			       for="e20r-annual-pricing-choice"><?php _e( 'Monthly', 'e20rapc' ); ?></label>
+			       for="e20r-monthly-pricing-choice"><?php _e( 'Monthly', 'e20rapc' ); ?></label>
 			<input type="radio" id="e20r-annual-pricing-choice" name="e20r-renewal_choice" class="e20r-annual-pricing"
 			       value="annually" <?php checked( $renewal_choice, 'annually' ); ?>/>
 			<label class="e20r-annual-pricing-header"
